@@ -52,6 +52,34 @@ void Player::Init(Board* board)
 		}
 	}
 
+	stack<Pos> s;
+
+	for (int i = 0; i < _path.size() - 1; i++)
+	{
+		// 스택의 첫번째 값이 다음 위치가 같다면 기본 스택에서 Pop
+		// 중복값을 찾는 과정 막 다른길에서 나갈려면 뒤를 돌아 나가니까 그 부분을 날려줌
+		if (s.empty() == false && s.top() == _path[i + 1])
+			s.pop();
+		else
+			s.push(_path[i]); 
+	}
+
+	// 목적지 도착
+	if (_path.empty() == false)
+		s.push(_path.back());
+
+	vector<Pos> path;
+	while (s.empty() == false)
+	{
+
+		path.push_back(s.top());
+		s.pop();
+	}
+	
+	//스택은 후입 선출 그러니 리버스
+	std::reverse(path.begin(), path.end());
+
+	_path = path;
 }
 
 void Player::Update(uint64 deltaTick)
