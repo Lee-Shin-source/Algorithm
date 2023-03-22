@@ -1,0 +1,3 @@
+﻿  Algorithm.cpp
+C:\Users\user\source\repos\Algorithm\Algorithm\Algorithm.cpp(157,34): error C2143: 구문 오류: ';'이(가) '!' 앞에 없습니다.
+C:\Users\user\source\repos\Algorithm\Algorithm\Algorithm.cpp(157,35): error C2059: 구문 오류: ';'
