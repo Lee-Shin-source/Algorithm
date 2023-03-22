@@ -119,7 +119,6 @@ void CreateGraph_3()
 
 }
 #pragma endregion
-
 #pragma region 가중치 추가
 void CreateGraph_4()
 {
@@ -164,13 +163,102 @@ void CreateGraph_4()
 #pragma endregion
 
 
+// DFS (Depth First Search) 깊이 우선 탐색
+// BFS (Breadth First Search) 너비 우선 탐색
 
+struct Vertex
+{
+	// data
+};
+
+vector<Vertex> vertices;
+vector<vector<int>> adjacent;
+vector<bool> visited; // 내가 방문한 목록
+void CreateGraph()
+{
+
+	vertices.resize(6);
+	adjacent = vector<vector<int>>(6);
+
+	// 인접 리스트 방식
+	//adjacent[0].push_back(1);
+	//adjacent[0].push_back(3);
+	//adjacent[1].push_back(0);
+	//adjacent[1].push_back(2);
+	//adjacent[1].push_back(3);
+	//adjacent[3].push_back(4);
+	//adjacent[5].push_back(4);
+
+	// 인접 행렬
+	adjacent = vector<vector<int>>
+	{
+		{0, 1, 0, 1, 0, 0},
+		{1, 0, 1, 1, 0, 0},
+		{0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 1, 0},
+		{0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 1, 0},
+
+	};
+
+}
+
+/// <summary>
+/// DFS
+/// 우선적으로 현재 방문한 노드에서 내가 방문하지않은 다른 노드가 있으면
+/// 그 노드를 우선적으로 이동함
+/// </summary>
+/// <param name="here"> 현재 시작 지점</param>
+void Dfs(int here)
+{
+	visited[here] = true; // 방문했다
+
+	cout << "Visited : " << here << endl;
+	// 인접 리스트 version
+	// 모든 인접 정점을 순회한다.
+	//for (int i = 0; i < adjacent[here].size(); i++)
+	//{
+	//	int there = adjacent[here][i];
+	//	if (visited[there] == false)
+	//		Dfs(there);
+	//}
+
+	// 인접 행렬 version
+	// 모든 인접 정점을 순회한다.
+	for (int there = 0; there < 6; there++)
+	{
+		if (adjacent[here][there] == 0)
+			continue;
+
+		// 아직 방문하지 않은 곳이 있으면 방문한다.
+		if (visited[there] == false)
+			Dfs(there);
+
+	}
+}
+
+/// <summary>
+/// 이것의 존재이유 위 코드를 봣을때 5번째 노드는 다른 노드랑 연결되있지는 않은데 
+/// 4번 노드를 가르키고있음 그럼 일반적인 위에 Dfs 코드로만으로는 커버가 안됨
+/// 그래서 나머지 노드들 중 방문 안한 노드를 전체적으로 순회 할수있게
+/// 모든 노드들을 시작점으로 두고 시작해보는것
+/// </summary>
+void DfsAll()
+{
+	//visited = vector<bool>(6, false);
+	// 시작점에 따라서 결과가 달라수있음
+	for (int i = 0; i < 6; i++)
+	{
+		if (visited[i] == false)
+			Dfs(i);
+	}
+}
 
 int main()
 {
-	CreateGraph_1();
-	CreateGraph_2();
-	CreateGraph_3();
-    std::cout << "Hello World!\n";
-}
+	CreateGraph();
+	visited = vector<bool>(6, false);
+	//Dfs(0);
+	DfsAll();
+;}
 
