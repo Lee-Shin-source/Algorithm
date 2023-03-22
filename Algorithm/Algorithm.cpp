@@ -163,8 +163,8 @@ void CreateGraph_4()
 #pragma endregion
 
 
-// DFS (Depth First Search) 깊이 우선 탐색
-// BFS (Breadth First Search) 너비 우선 탐색
+
+
 
 struct Vertex
 {
@@ -173,7 +173,9 @@ struct Vertex
 
 vector<Vertex> vertices;
 vector<vector<int>> adjacent;
-vector<bool> visited; // 내가 방문한 목록
+vector<bool> visited; // 내가 방문한 목록 (DFS)
+vector<bool> discovered; // 발견 여부 (BFS)
+
 void CreateGraph()
 {
 
@@ -198,10 +200,14 @@ void CreateGraph()
 		{0, 0, 0, 0, 1, 0},
 		{0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 1, 0},
-
 	};
 
 }
+
+// DFS (Depth First Search) 깊이 우선 탐색
+#pragma region DFS
+// 그래프 전체가 어떤 구조로 되어있는지.
+// 그래프의 순환구조가 있는지 알아낼떄 쓸수있음
 
 /// <summary>
 /// DFS
@@ -253,12 +259,91 @@ void DfsAll()
 			Dfs(i);
 	}
 }
+#pragma endregion
+
+// BFS (Breadth First Search) 너비 우선 탐색
+#pragma region BFS
+// 길찾기에 유용함
+// Q를 이용한 예약 시스템으로 만듬
+
+void Bfs(int here)
+{
+	// 누구에 의해 발견 되었는지?
+	vector<int> parent(6, -1); // 경로 추적
+	// 시작점에서 얼만큼 떨어져 있는지?
+	vector<int> distance(6, -1); // 거리
+
+	queue<int> q;
+	q.push(here);
+	
+	discovered[here] = true;
+
+	distance[here] = 0;
+	parent[here] = here;
+
+	while (q.empty() == false)
+	{
+		here = q.front();
+		q.pop();
+
+		cout << here << endl;
+		
+		// 인접 리스트
+		//for (int there : adjacent[here])
+		//{
+		//	if (discovered[there])
+		//		continue;
+
+		//	q.push(there);
+		//	discovered[there] = true;
+
+		//	parent[there] = here;
+		//	distance[there] = distance[here] + 1;
+		//}
+
+		// 인접 행렬
+		for (int there = 0; there < 6; there++)
+		{
+			if (adjacent[here][there] == 0)
+				continue;
+
+			if (discovered[there])
+				continue;
+
+			q.push(there);
+			discovered[there] = true;
+
+			parent[there] = here;
+			distance[there] = distance[here] + 1;
+		}
+	}
+
+}
+
+void BfsAll()
+{
+	for (int i = 0; i < 6; i++)
+	{
+		if (discovered[i])
+			continue;
+
+		Bfs(i);
+	}
+}
+#pragma endregion
+
+
+
 
 int main()
 {
 	CreateGraph();
-	visited = vector<bool>(6, false);
+	/*visited = vector<bool>(6, false);*/
+	discovered = vector<bool>(6, false);
+	Bfs(0);
+	//BfsAll();
+
 	//Dfs(0);
-	DfsAll();
+	//DfsAll();
 ;}
 
